@@ -7,7 +7,7 @@ const dock = require('../utils/dock')
 // See this post for more interesting information about the topic:
 // https://medium.muz.li/ok-key-and-cancel-key-which-one-should-be-set-up-on-the-left-4780e86c16eb
 module.exports = function ({
-  title, message, type = 'info', showDock = true, buttons = [
+  title, message, type = /** @type {'info' | 'none' | 'error' | 'question' | 'warning'} */ ('info'), showDock = true, buttons = [
     i18n.t('ok'),
     i18n.t('cancel')
   ], ...opts
@@ -16,6 +16,11 @@ module.exports = function ({
     type: type,
     buttons: buttons,
     noLink: true,
+    message: message,
+    detail: IS_MAC ? message : undefined,
+    title: IS_MAC ? undefined : title,
+    defaultId: !IS_MAC ? buttons.length - 1 : 0,
+    cancelId:  !IS_MAC ? buttons.length - 2 : 1,
     ...opts
   }
 

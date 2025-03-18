@@ -1,6 +1,7 @@
 const { app, Menu, shell } = require('electron')
 const logger = require('./common/logger')
 
+/** @type {import('electron').MenuItemConstructorOptions[]} */
 const template = [
   {
     label: 'Edit',
@@ -11,21 +12,24 @@ const template = [
       { role: 'cut' },
       { role: 'copy' },
       { role: 'paste' },
-      { role: 'pasteandmatchstyle' },
+      
+
+      { type: 'separator' },
       { role: 'delete' },
-      { role: 'selectall' }
+      { role: 'minimize' },
+      { type: 'separator' },
+
+      { role: 'delete' },
+
     ]
   },
   {
     label: 'View',
     submenu: [
       { role: 'reload' },
-      { role: 'forcereload' },
-      { role: 'toggledevtools' },
+
       { type: 'separator' },
-      { role: 'resetzoom' },
-      { role: 'zoomin' },
-      { role: 'zoomout' },
+
       { type: 'separator' },
       { role: 'togglefullscreen' }
     ]
@@ -59,24 +63,50 @@ if (process.platform === 'darwin') {
       { role: 'services' },
       { type: 'separator' },
       { role: 'hide' },
-      { role: 'hideothers' },
+      { role: 'hideOthers' },
       { role: 'unhide' },
       { type: 'separator' },
       { role: 'quit' }
     ]
   })
 
-  // Edit menu
-  template[1].submenu.push(
+  // // Edit menu
+  // template[1].submenu.push(
+  //   { type: 'separator' },
+  //   {
+  //     label: 'Speech',
+  //     submenu: [
+  //       { role: 'startspeaking' },
+  //       { role: 'stopspeaking' }
+  //     ]
+  //   }
+  // )
+
+  // Window menu
+  template[3].submenu = [
+    { role: 'close' },
+    { role: 'minimize' },
+    { role: 'zoom' },
     { type: 'separator' },
-    {
-      label: 'Speech',
-      submenu: [
-        { role: 'startspeaking' },
-        { role: 'stopspeaking' }
-      ]
-    }
-  )
+    { role: 'front' }
+  ]
+}
+
+if (process.platform === 'darwin') {
+  template.unshift({
+    label: app.name,
+    submenu: [
+      { role: 'about' },
+      { type: 'separator' },
+      { role: 'services' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      { role: 'quit' }
+    ]
+  })
+
 
   // Window menu
   template[3].submenu = [

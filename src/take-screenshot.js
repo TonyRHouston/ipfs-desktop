@@ -59,7 +59,7 @@ function handleScreenshot () {
     if (!ipfsd) {
       return
     }
-
+    //@ts-ignore
     const ipfs = ipfsd.api
 
     if (!ipfs) {

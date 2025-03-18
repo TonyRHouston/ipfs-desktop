@@ -11,7 +11,8 @@ const store = require('../common/store')
 const CONFIG_KEYS = require('../common/config-keys')
 
 function isAutoUpdateSupported () {
-  if (store.get(CONFIG_KEYS.DISABLE_AUTO_UPDATE, false)) {
+  console.log("auto-update/index")
+  if (store.get(CONFIG_KEYS.AUTO_UPDATE, "AutoUpdate") ) {
     logger.info('[updater] auto update explicitly disabled, not checking for updates automatically')
     return false
   }
@@ -54,7 +55,7 @@ function setup () {
     try {
       await autoUpdater.downloadUpdate()
     } catch (err) {
-      logger.error(`[updater] ${err.toString()}`)
+      logger.error(`[updater] ${String(err)}`)
     }
 
     if (!feedback) {

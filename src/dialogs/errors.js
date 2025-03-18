@@ -77,7 +77,7 @@ function criticalErrorDialog (e) {
   const option = dialog({
     title: i18n.t('ipfsDesktopHasShutdownDialog.title'),
     message: i18n.t('ipfsDesktopHasShutdownDialog.message'),
-    type: 'error',
+    type: /** @type {'info' | 'none' | 'error' | 'question' | 'warning' | undefined} */ ('error'),
     buttons: [
       i18n.t('restartIpfsDesktop'),
       i18n.t('close'),
@@ -101,12 +101,17 @@ function recoverableErrorDialog (e, options) {
   const cfg = {
     title: i18n.t('recoverableErrorDialog.title'),
     message: i18n.t('recoverableErrorDialog.message'),
-    type: 'error',
+    type: /** @type {'info' | 'none' | 'error' | 'question' | 'warning' | undefined} */ ('error'),
     buttons: [
       i18n.t('close'),
       i18n.t('reportTheError'),
       i18n.t('openLogs')
-    ]
+    ],
+    noLink: true,
+    detail: e.stack,
+    defaultId: 1,
+    cancelId: 0
+    
   }
 
   if (options) {

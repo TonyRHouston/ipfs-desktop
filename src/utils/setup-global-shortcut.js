@@ -34,7 +34,7 @@ module.exports = function ({ settingsOption, accelerator, action, confirmationDi
     return true
   }
 
-  activate({ newValue: store.get(settingsOption, false) })
+  activate({ newValue: store.get(settingsOption, false), oldValue: false, feedback: false })
   createToggler(settingsOption, activate)
 
   if (!IS_MAC) {

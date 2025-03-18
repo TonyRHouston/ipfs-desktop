@@ -90,7 +90,7 @@ async function addFileOrDirectory (ipfs, filepath) {
   let cid = null
 
   if (stat.isDirectory()) {
-    const files = globSource(filepath, '**/*', { recursive: true, cidVersion: 1 })
+    const files = globSource(filepath, '**/*', { preserveMode: true })
     const res = await last(ipfs.addAll(files, {
       pin: false,
       wrapWithDirectory: true,
@@ -129,7 +129,7 @@ module.exports = async function (files) {
       const res = await addFileOrDirectory(ipfsd.api, file)
       successes.push(res)
     } catch (e) {
-      failures.push(e.toString())
+      failures.push(String(e))
     }
   }))
 

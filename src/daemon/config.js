@@ -167,7 +167,7 @@ function migrateConfig (ipfsd) {
     config = readConfigFile(ipfsd)
   } catch (err) {
     // This is a best effort check, dont blow up here, that should happen else where.
-    logger.error(`[daemon] migrateConfig: error reading config file: ${err.message || err}`)
+    logger.error(`[daemon] migrateConfig: error reading config file: ${String(err) || err}`)
     return
   }
 
@@ -251,7 +251,7 @@ function migrateConfig (ipfsd) {
       writeConfigFile(ipfsd, config)
       store.safeSet(REVISION_KEY, REVISION)
     } catch (err) {
-      logger.error(`[daemon] migrateConfig: error writing config file: ${err.message || err}`)
+      logger.error(`[daemon] migrateConfig: error writing config file: ${String(err) || err}`)
       return
     }
   }
@@ -467,7 +467,7 @@ function checkRepositoryAndConfiguration (ipfsd) {
     return true
   } catch (e) {
     // Save to error.log
-    logger.error(e)
+    logger.error(String(e))
     dialogs.repositoryIsInvalidDialog(ipfsd.path)
     return false
   }

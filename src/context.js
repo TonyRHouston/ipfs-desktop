@@ -63,7 +63,7 @@ class Context {
       this._properties.set(propertyName, value)
       this._resolvePropToValue(propertyName, value)
     } catch (e) {
-      logger.error(e)
+      logger.error(new Error(String(e)))
     }
   }
 
@@ -105,7 +105,7 @@ class Context {
         return await originalFn(...args)
       } catch (err) {
         logger.error(`[ctx] Error calling ${String(propertyName)}`)
-        logger.error(err)
+        logger.error(String(err))
         throw err
       }
     }

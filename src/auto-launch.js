@@ -92,7 +92,7 @@ module.exports = async function () {
 
       return true
     } catch (err) {
-      logger.error(`[launch on startup] ${err.toString()}`)
+      logger.error(`[launch on startup] ${String(err)}`)
 
       if (feedback) {
         recoverableErrorDialog(err, {
@@ -105,7 +105,7 @@ module.exports = async function () {
     }
   }
 
-  activate({ newValue: store.get(CONFIG_KEY, false) })
+  activate({ newValue: store.get(CONFIG_KEY, false), oldValue: null, feedback:false })
   createToggler(CONFIG_KEY, activate)
 }
 

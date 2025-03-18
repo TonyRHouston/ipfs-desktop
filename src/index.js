@@ -60,7 +60,7 @@ async function run () {
   try {
     await app.whenReady()
   } catch (e) {
-    dialog.showErrorBox('Electron could not start', e.stack)
+    dialog.showErrorBox('Electron could not start', String(e))
     app.exit(1)
   }
 

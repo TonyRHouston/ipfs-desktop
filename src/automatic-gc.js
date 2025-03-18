@@ -47,12 +47,12 @@ module.exports = async function () {
 
       return true
     } catch (err) {
-      logger.error(`[automatic gc] ${err.toString()}`)
+      logger.error(`[automatic gc] ${String(err)}`)
 
       return false
     }
   }
-  activate({ newValue: store.get(CONFIG_KEY, true) })
+  activate({ newValue: store.get(CONFIG_KEY, true), oldValue: null })
   createToggler(CONFIG_KEY, activate)
   logger.info(`[automatic gc] ${store.get(CONFIG_KEY, true) ? 'enabled' : 'disabled'}`)
 }

@@ -20,8 +20,8 @@ function handleError (err) {
     return
   }
 
-  logger.error(err)
-  criticalErrorDialog(err)
+  logger.error(String(err))
+  criticalErrorDialog(new Error(String(err)))
 }
 
 module.exports = handleError

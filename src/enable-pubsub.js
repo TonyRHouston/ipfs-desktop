@@ -43,7 +43,7 @@ module.exports = async function () {
 
       return true
     } catch (err) {
-      logger.error(`[pubsub] ${err.toString()}`)
+      logger.error(`[pubsub] ${String(err)}`)
 
       return false
     }
