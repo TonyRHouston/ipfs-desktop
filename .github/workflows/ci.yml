@@ -19,7 +19,8 @@ jobs:
       id: read-webui-version
       run: 'echo ''::echo::on''
 
-        echo "cid=$(grep "build:webui:download" package.json | grep -Eio "bafy[a-z0-9]+")" >> $GITHUB_OUTPUT
+        echo "cid=$(grep "build:webui:download" package.json | grep -Eio "bafy[a-z0-9]+")"
+        >> $GITHUB_OUTPUT
 
         echo ''::echo::off''
 
@@ -37,8 +38,10 @@ jobs:
       if: steps.webui-cache.outputs.cache-hit != 'true'
       with:
         path: ${{ github.workspace }}/.cache
-        key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml') }}
-        restore-keys: '${{ runner.os }}-${{ hashFiles(''package.json'', ''package-lock.json'', ''electron-builder.yml'') }}
+        key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml')
+          }}
+        restore-keys: '${{ runner.os }}-${{ hashFiles(''package.json'', ''package-lock.json'',
+          ''electron-builder.yml'') }}
 
           ${{ runner.os }}-
 
@@ -51,7 +54,8 @@ jobs:
       if: steps.webui-cache.outputs.cache-hit != 'true'
     - name: Install dependencies and fetch ipfs-webui
       if: steps.webui-cache.outputs.cache-hit != 'true'
-      run: 'npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
+      run: 'npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace
+        }}/.cache/npm
 
         npm run clean
 
@@ -65,7 +69,7 @@ jobs:
         path: assets/webui
         if-no-files-found: error
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     needs: webui
     strategy:
       fail-fast: !!bool 'false'
@@ -83,7 +87,8 @@ jobs:
         node-version: lts/*
     - name: Read ipfs-webui CID from package.json
       id: read-webui-version
-      run: echo "cid=$(grep "build:webui:download" package.json | grep -Eio "bafy[a-z0-9]+")" >> $GITHUB_OUTPUT
+      run: echo "cid=$(grep "build:webui:download" package.json | grep -Eio "bafy[a-z0-9]+")"
+        >> $GITHUB_OUTPUT
       shell: bash
     - name: Cache webui
       uses: actions/cache@v4
@@ -96,8 +101,10 @@ jobs:
       id: cache
       with:
         path: ${{ github.workspace }}/.cache
-        key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml') }}
-        restore-keys: '${{ runner.os }}-${{ hashFiles(''package.json'', ''package-lock.json'', ''electron-builder.yml'') }}
+        key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml')
+          }}
+        restore-keys: '${{ runner.os }}-${{ hashFiles(''package.json'', ''package-lock.json'',
+          ''electron-builder.yml'') }}
 
           ${{ runner.os }}-
 
@@ -109,7 +116,8 @@ jobs:
     - uses: ipfs/start-ipfs-daemon-action@v1
       if: steps.webui-cache.outputs.cache-hit != 'true'
     - name: Install dependencies
-      run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
+      run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace
+        }}/.cache/npm
     - name: Build
       run: npm run build
     - name: Stop any ipfs daemon before tests
@@ -125,7 +133,7 @@ jobs:
     - name: Lint
       run: npm run lint
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     needs: test
     strategy:
       fail-fast: !!bool 'false'
@@ -143,7 +151,8 @@ jobs:
         node-version: lts/*
     - name: Read ipfs-webui CID from package.json
       id: read-webui-version
-      run: echo "cid=$(grep "build:webui:download" package.json | grep -Eio "bafy[a-z0-9]+")" >> $GITHUB_OUTPUT
+      run: echo "cid=$(grep "build:webui:download" package.json | grep -Eio "bafy[a-z0-9]+")"
+        >> $GITHUB_OUTPUT
       shell: bash
     - name: Cache webui
       uses: actions/cache@v4
@@ -156,8 +165,10 @@ jobs:
       id: cache
       with:
         path: ${{ github.workspace }}/.cache
-        key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml') }}
-        restore-keys: '${{ runner.os }}-${{ hashFiles(''package.json'', ''package-lock.json'', ''electron-builder.yml'') }}
+        key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml')
+          }}
+        restore-keys: '${{ runner.os }}-${{ hashFiles(''package.json'', ''package-lock.json'',
+          ''electron-builder.yml'') }}
 
           ${{ runner.os }}-
 
@@ -169,22 +180,26 @@ jobs:
     - uses: ipfs/start-ipfs-daemon-action@v1
       if: steps.webui-cache.outputs.cache-hit != 'true'
     - name: Install dependencies
-      run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
+      run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace
+        }}/.cache/npm
     - name: Build
       run: npm run build
     - name: Get tag
       id: tag
-      run: "if [[ \"$GITHUB_REF\" == \"refs/tags/\"* ]]; then\n  echo \"tag=${GITHUB_REF/refs\\/tags\\//}\" >> $GITHUB_OUTPUT\nfi\n"
+      run: "if [[ \"$GITHUB_REF\" == \"refs/tags/\"* ]]; then\n  echo \"tag=${GITHUB_REF/refs\\\
+        /tags\\//}\" >> $GITHUB_OUTPUT\nfi\n"
       shell: bash
       continue-on-error: !!bool 'true'
     - name: Run release-please release-pr
-      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name
+        == 'workflow_dispatch')
       run: npm run release-pr
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       continue-on-error: !!bool 'true'
     - name: Run release-please github-release
-      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name
+        == 'workflow_dispatch')
       run: npm run release-gh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
