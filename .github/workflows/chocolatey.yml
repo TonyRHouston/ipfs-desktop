@@ -13,7 +13,7 @@ env:
   release_name: ${{ github.event.inputs.manual_name || github.event.release.name }}
 jobs:
   publish:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Check out Git repository
       uses: actions/checkout@v4
@@ -26,8 +26,10 @@ jobs:
       id: cache
       with:
         path: ${{ github.workspace }}/.cache
-        key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml') }}
-        restore-keys: '${{ runner.os }}-${{ hashFiles(''package.json'', ''package-lock.json'', ''electron-builder.yml'') }}
+        key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml')
+          }}
+        restore-keys: '${{ runner.os }}-${{ hashFiles(''package.json'', ''package-lock.json'',
+          ''electron-builder.yml'') }}
 
           ${{ runner.os }}-
 
@@ -41,7 +43,8 @@ jobs:
 
         '
     - name: Install dependencies
-      run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
+      run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace
+        }}/.cache/npm
     - name: Download .exe, update version, URL and hash
       run: node update.mjs ${{ env.CHOCO_RELEASE_NAME }}
       working-directory: .\pkgs\chocolatey
@@ -49,5 +52,6 @@ jobs:
       run: choco pack
       working-directory: .\pkgs\chocolatey
     - name: Publish to Chocolatey
-      run: choco push ipfs-desktop.${{ env.CHOCO_RELEASE_NAME }}.nupkg --key ${{ secrets.chocolatey_key }} --source "https://push.chocolatey.org"
+      run: choco push ipfs-desktop.${{ env.CHOCO_RELEASE_NAME }}.nupkg --key ${{ secrets.chocolatey_key
+        }} --source "https://push.chocolatey.org"
       working-directory: .\pkgs\chocolatey
